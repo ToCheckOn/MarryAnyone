@@ -16,12 +16,10 @@ namespace MarryAnyone.Behaviors
             starter.AddPlayerLine("main_option_discussions_MA", "hero_main_options", "lord_talk_speak_diplomacy_MA", "{=lord_conversations_343}There is something I'd like to discuss.", new ConversationSentence.OnConditionDelegate(conversation_begin_courtship_for_hero_on_condition), null, 120, null, null);
             starter.AddDialogLine("character_agrees_to_discussion_MA", "lord_talk_speak_diplomacy_MA", "lord_talk_speak_diplomacy_2", "{=OD1m1NYx}{STR_INTRIGUE_AGREEMENT}", new ConversationSentence.OnConditionDelegate(conversation_character_agrees_to_discussion_on_condition), null, 100, null);
 
-            // From previous iteration
+            // Dialog skips from first versions of mod
             starter.AddDialogLine("persuasion_leave_faction_npc_result_success_2", "lord_conclude_courtship_stage_2", "close_window", "{=k7nGxksk}Splendid! Let us conduct the ceremony, then.", new ConversationSentence.OnConditionDelegate(conversation_finalize_courtship_for_hero_on_condition), new ConversationSentence.OnConsequenceDelegate(conversation_courtship_success_on_consequence), 140, null);
             starter.AddDialogLine("hero_courtship_persuasion_2_success", "lord_start_courtship_response_3", "lord_conclude_courtship_stage_2", "{=xwS10c1b}Yes... I think I would be honored to accept your proposal.", new ConversationSentence.OnConditionDelegate(conversation_finalize_courtship_for_hero_on_condition), null, 120, null);
-
             starter.AddPlayerLine("hero_romance_task", "hero_main_options", "lord_start_courtship_response_3", "{=cKtJBdPD}I wish to offer my hand in marriage.", new ConversationSentence.OnConditionDelegate(conversation_finalize_courtship_for_hero_on_condition), null, 140, null, null);
-
             starter.AddDialogLine("persuasion_leave_faction_npc_result_success_2", "lord_conclude_courtship_stage_2", "close_window", "{=k7nGxksk}Splendid! Let us conduct the ceremony, then.", new ConversationSentence.OnConditionDelegate(conversation_finalize_courtship_for_hero_on_condition), new ConversationSentence.OnConsequenceDelegate(conversation_courtship_success_on_consequence), 140, null);
         }
 
@@ -74,41 +72,46 @@ namespace MarryAnyone.Behaviors
             ISettingsProvider settings = new MASettings();
             Romance.RomanceLevelEnum romanticLevel = Romance.GetRomanticLevel(Hero.MainHero, Hero.OneToOneConversationHero);
             bool clanLeader = Hero.MainHero.Clan.Leader == Hero.MainHero && Hero.MainHero.Clan.Lords.Contains(Hero.OneToOneConversationHero);
+            bool isCheating = Hero.OneToOneConversationHero.Spouse is not null && settings.Cheating;
 
             if (settings.Difficulty == "Realistic")
             {
                 // Skip issues with bartering marriage within clans
                 // If you are the leader of the clan then it is a problem
-                if (clanLeader)
+                if (clanLeader || isCheating)
                 {
-                    MAHelper.Print("Realistic: Clan Leader");
+                    // Skip bartering for clan leader or cheating nobles
+                    MAHelper.Print("Realistic: Clan Leader or Cheating");
                     return Romance.MarriageCourtshipPossibility(Hero.MainHero, Hero.OneToOneConversationHero) && romanticLevel == Romance.RomanceLevelEnum.CoupleAgreedOnMarriage;
                 }
                 if (Hero.OneToOneConversationHero.IsNoble || Hero.OneToOneConversationHero.IsMinorFactionHero)
                 {
+                    // Go through bartering for any other normal notable
                     MAHelper.Print("Realistic: Noble");
                     return false;
                 }
+                // For any companion skip bartering
                 return Romance.MarriageCourtshipPossibility(Hero.MainHero, Hero.OneToOneConversationHero) && romanticLevel == Romance.RomanceLevelEnum.CoupleAgreedOnMarriage;
             }
             else
             {
-                if (clanLeader)
+                if (settings.Difficulty == "Easy")
                 {
-                    if (settings.Difficulty == "Easy")
+                    if (Hero.OneToOneConversationHero.IsNoble || Hero.OneToOneConversationHero.IsMinorFactionHero)
                     {
-                        MAHelper.Print("Easy: Clan Leader");
-                        return Romance.MarriageCourtshipPossibility(Hero.MainHero, Hero.OneToOneConversationHero) && romanticLevel == Romance.RomanceLevelEnum.CoupleAgreedOnMarriage;
+                        if (clanLeader || isCheating)
+                        {
+                            // Skip bartering for clan leader or cheating nobles
+                            MAHelper.Print("Easy: Clan Leader or Cheating");
+                            return Romance.MarriageCourtshipPossibility(Hero.MainHero, Hero.OneToOneConversationHero) && romanticLevel == Romance.RomanceLevelEnum.CoupleAgreedOnMarriage;
+                        }
+                        // Go through bartering for any other normal notable
+                        MAHelper.Print("Easy: Noble");
+                        return false;
                     }
-                    MAHelper.Print("Very Easy: Clan Leader");
-                    return Romance.MarriageCourtshipPossibility(Hero.MainHero, Hero.OneToOneConversationHero) && (romanticLevel == Romance.RomanceLevelEnum.CourtshipStarted || romanticLevel == Romance.RomanceLevelEnum.CoupleDecidedThatTheyAreCompatible);
                 }
-                if (settings.Difficulty == "Easy" && (Hero.OneToOneConversationHero.IsNoble || Hero.OneToOneConversationHero.IsMinorFactionHero))
-                {
-                    MAHelper.Print("Easy: Noble");
-                    return false;
-                }
-                MAHelper.Print("Very Easy");
+                // Very Easy: For anyone skip entire romance
+                // Easy: For any companion skip entire romance
                 return Romance.MarriageCourtshipPossibility(Hero.MainHero, Hero.OneToOneConversationHero) && (romanticLevel == Romance.RomanceLevelEnum.CourtshipStarted || romanticLevel == Romance.RomanceLevelEnum.CoupleDecidedThatTheyAreCompatible);
             }
         }

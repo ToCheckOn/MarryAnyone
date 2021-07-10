@@ -45,9 +45,9 @@ namespace MarryAnyone.Patches.Behaviors
             }
             bool flag = Hero.MainHero.IsFemale && settings.SexualOrientation == "Heterosexual" || !Hero.MainHero.IsFemale && settings.SexualOrientation == "Homosexual" || !Hero.OneToOneConversationHero.IsFemale && settings.SexualOrientation == "Bisexual";
             Romance.RomanceLevelEnum romanceLevel = Romance.GetRomanticLevel(Hero.MainHero, Hero.OneToOneConversationHero); // better to use a local variable
-            MAHelper.Print("Courtship Possible: " + Romance.MarriageCourtshipPossibility(Hero.MainHero, Hero.OneToOneConversationHero).ToString());
-            MAHelper.Print("Romantic Level: " + romanceLevel.ToString());
-            MAHelper.Print("Retry Courtship: " + settings.RetryCourtship.ToString());
+            MAHelper.Print("Courtship Possible: " + Romance.MarriageCourtshipPossibility(Hero.MainHero, Hero.OneToOneConversationHero));
+            MAHelper.Print("Romantic Level: " + romanceLevel);
+            MAHelper.Print("Retry Courtship: " + settings.RetryCourtship);
 
             if (Romance.MarriageCourtshipPossibility(Hero.MainHero, Hero.OneToOneConversationHero) && romanceLevel == Romance.RomanceLevelEnum.Untested)
             {
@@ -102,10 +102,11 @@ namespace MarryAnyone.Patches.Behaviors
                 if (settings.RetryCourtship)
                 {
                     if (romanceLevel == Romance.RomanceLevelEnum.Ended)
+                    {
                         // OnNeNousDitPasTout/GrandesMaree Patch
                         // Patch we must have only have one romance status for each relation
                         Util.Util.CleanRomance(Hero.MainHero, Hero.OneToOneConversationHero);
-
+                    }
                     if (romanceLevel == Romance.RomanceLevelEnum.FailedInCompatibility || romanceLevel == Romance.RomanceLevelEnum.Ended)
                     {
                         ChangeRomanticStateAction.Apply(Hero.MainHero, Hero.OneToOneConversationHero, Romance.RomanceLevelEnum.CourtshipStarted);

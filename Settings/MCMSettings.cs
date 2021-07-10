@@ -68,10 +68,6 @@ namespace MarryAnyone.Settings
         [SettingPropertyGroup("{=adoption}Adoption", GroupOrder = 2)]
         public float AdoptionChance { get; set; } = 0.05f;
 
-        [SettingPropertyBool("{=adoption_titles}Adoption Titles", RequireRestart = false, HintText = "{=adoption_titles_desc}Encyclopedia displays children without a parent as adopted")]
-        [SettingPropertyGroup("{=adoption}Adoption", GroupOrder = 2)]
-        public bool AdoptionTitles { get; set; } = false;
-
         [SettingPropertyBool("{=retry_courtship}Retry Courtship", RequireRestart = false, HintText = "{=retry_courtship_desc}Player can retry courtship after failure")]
         [SettingPropertyGroup("{=courtship}Courtship", GroupOrder = 1)]
         public bool RetryCourtship { get; set; } = false;

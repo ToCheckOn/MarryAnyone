@@ -7,7 +7,6 @@
 	"Cheating": false,
 	"Adoption": false,
 	"AdoptionChance": 0.05,
-	"AdoptionTitles": false,
 	"RetryCourtship": false,
 	"Debug": false,
 	"Warning": true

@@ -66,15 +66,16 @@ namespace MarryAnyone.Patches.Helpers
 
         private static TextObject GetHeroRelationToHeroTextShort(Hero queriedHero, Hero baseHero)
         {
-            if (baseHero.Father == queriedHero && (baseHero.Spouse == queriedHero || queriedHero.ExSpouses.Contains(baseHero) || baseHero.ExSpouses.Contains(queriedHero)))
+            bool exSpouse = queriedHero.ExSpouses.Contains(baseHero) || baseHero.ExSpouses.Contains(queriedHero);
+            if (baseHero.Father == queriedHero && exSpouse)
             {
                 return GameTexts.FindText("str_fatherhusband");
             }
-            if (baseHero.Mother == queriedHero && (baseHero.Spouse == queriedHero || queriedHero.ExSpouses.Contains(baseHero) || baseHero.ExSpouses.Contains(queriedHero)))
+            if (baseHero.Mother == queriedHero && exSpouse)
             {
                 return GameTexts.FindText("str_motherwife");
             }
-            if (baseHero.Siblings.Contains(queriedHero) && (baseHero.Spouse == queriedHero || queriedHero.ExSpouses.Contains(baseHero) || baseHero.ExSpouses.Contains(queriedHero)))
+            if (baseHero.Siblings.Contains(queriedHero) && exSpouse)
             {
                 if (!queriedHero.IsFemale)
                 {
@@ -82,7 +83,7 @@ namespace MarryAnyone.Patches.Helpers
                 }
                 return GameTexts.FindText("str_sisterwife");
             }
-            if (baseHero.Children.Contains(queriedHero) && (baseHero.Spouse == queriedHero || queriedHero.ExSpouses.Contains(baseHero) || baseHero.ExSpouses.Contains(queriedHero)))
+            if (baseHero.Children.Contains(queriedHero) && exSpouse)
             {
                 if (!queriedHero.IsFemale)
                 {
@@ -90,8 +91,9 @@ namespace MarryAnyone.Patches.Helpers
                 }
                 return GameTexts.FindText("str_daughterwife");
             }
-            ISettingsProvider settings = new MASettings();
-            if (settings.AdoptionTitles && settings.Adoption)
+            // Adoption titles
+            // Have it only apply to main hero so it makes sense
+            if (queriedHero == Hero.MainHero)
             {
                 if ((baseHero.Mother is null) != (baseHero.Father is null))
                 {
@@ -104,6 +106,9 @@ namespace MarryAnyone.Patches.Helpers
                         return GameTexts.FindText("str_adoptivefather");
                     }
                 }
+            }
+            if (baseHero == Hero.MainHero)
+            {
                 if ((queriedHero.Mother is null) != (queriedHero.Father is null))
                 {
                     if (baseHero.Children.Contains(queriedHero))
@@ -116,7 +121,8 @@ namespace MarryAnyone.Patches.Helpers
                     }
                 }
             }
-            if (baseHero.Spouse == queriedHero || queriedHero.ExSpouses.Contains(baseHero) || baseHero.ExSpouses.Contains(queriedHero))
+            // Defined what ex-spouses are
+            if (baseHero.Spouse == queriedHero || exSpouse)
             {
                 if (!queriedHero.IsAlive || !baseHero.IsAlive)
                 {
@@ -132,7 +138,6 @@ namespace MarryAnyone.Patches.Helpers
                 }
                 return GameTexts.FindText("str_wife");
             }
-
             // Revamped spouse's spouse
             if (baseHero.Spouse is not null)
             {
