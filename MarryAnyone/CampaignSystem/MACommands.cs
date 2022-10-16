@@ -76,6 +76,19 @@ namespace MarryAnyone.CampaignSystem
             return "Setting polygamy is " + (flag ? "enabled." : "disabled.");
         }
 
+        [CommandLineFunctionality.CommandLineArgumentFunction("set_debug_is_enabled", "marry_anyone")]
+        public static string SetDebugIsEnabled(List<string> strings)
+        {
+            MASettings settings = new();
+            if (strings.Count != 1 || (strings[0] != "0" && strings[0] != "1"))
+            {
+                return "Input is incorrect [0/1].";
+            }
+            bool flag = strings[0] == "1";
+            settings.Debug = flag;
+            return "Setting debug is " + (flag ? "enabled." : "disabled.");
+        }
+
         [CommandLineFunctionality.CommandLineArgumentFunction("set_polyamory_is_enabled", "marry_anyone")]
         public static string SetPolyamoryIsEnabled(List<string> strings)
         {

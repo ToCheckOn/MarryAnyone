@@ -16,6 +16,13 @@ namespace MarryAnyone.Actions
 
         // Appears to ultimately avoid disbanding parties and the like...
         // Never disband party for hero, do for everyone else...
+
+        // Marrying into a clan is very buggy
+        // The game expects that the player character is always the clan leader
+        // Even when this is not the case...
+        // This leads to long term instability in the game
+        // It might just be best to follow what Bannerlord wants and take out these settings
+        // And make sure faction leaders leave their factions gracefully
         private static void ApplyInternal(Hero firstHero, Hero secondHero, bool showNotification)
         {
             MASettings settings = new();
