@@ -10,8 +10,6 @@
         bool Cheating { get; set; }
         bool SkipCourtship { get; set; }
         bool RetryCourtship { get; set; }
-        string PlayerClan { get; set; }
-        string ClanLeader { get; set; }
         bool Debug { get; set; }
         string TemplateCharacter { get; set; }
     }

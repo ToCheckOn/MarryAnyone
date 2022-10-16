@@ -50,10 +50,6 @@ namespace MarryAnyone.Settings
 
         private bool _debug = false;
 
-        private string _playerClan = "Default";
-
-        private string _clanLeader = "Default";
-
         private string _sexualOrientation = "Heterosexual";
 
         private string _templateCharacter = "Default";
@@ -73,8 +69,6 @@ namespace MarryAnyone.Settings
                     SkipCourtship = _skipCourtship,
                     RetryCourtship = _retryCourtship,
                     TemplateCharacter = _templateCharacter,
-                    PlayerClan = _playerClan,
-                    ClanLeader = _clanLeader,
                     Debug = _debug
                 };
                 string jsonString = JsonConvert.SerializeObject(config, Formatting.Indented);
@@ -101,14 +95,6 @@ namespace MarryAnyone.Settings
                 {
                     throw new Exception($"{config.TemplateCharacter} is not a valid TemplateCharacter. Valid options: \"Default\" or \"Wanderer\"");
                 }
-                if (config.PlayerClan != "Default" && config.PlayerClan != "Always" && config.PlayerClan != "Never")
-                {
-                    throw new Exception($"{config.PlayerClan} is not a valid PlayerClan. Valid options: \"Default\", \"Always\", or \"Never\"");
-                }
-                if (config.ClanLeader != "Default" && config.ClanLeader != "Always" && config.ClanLeader != "Never")
-                {
-                    throw new Exception($"{config.ClanLeader} is not a valid ClanLeader. Valid options: \"Default\", \"Always\", or \"Never\"");
-                }
                 _sexualOrientation = config.SexualOrientation!;
                 _polygamy = config.Polygamy;
                 _polyamory = config.Polyamory;
@@ -118,8 +104,6 @@ namespace MarryAnyone.Settings
                 _retryCourtship = config.RetryCourtship;
                 _skipCourtship = config.SkipCourtship;
                 _templateCharacter = config.TemplateCharacter!;
-                _playerClan = config.PlayerClan!;
-                _clanLeader = config.ClanLeader!;
                 _debug = config.Debug;
             }
             catch (Exception e)
@@ -294,40 +278,6 @@ namespace MarryAnyone.Settings
                 if (_templateCharacter != value)
                 {
                     _templateCharacter = value;
-                    WriteConfig();
-                }
-            }
-        }
-
-        public string PlayerClan
-        {
-            get
-            {
-                ReadConfig();
-                return _playerClan;
-            }
-            set
-            {
-                if (_playerClan != value)
-                {
-                    _playerClan = value;
-                    WriteConfig();
-                }
-            }
-        }
-
-        public string ClanLeader
-        {
-            get
-            {
-                ReadConfig();
-                return _clanLeader;
-            }
-            set
-            {
-                if (_clanLeader != value)
-                {
-                    _clanLeader = value;
                     WriteConfig();
                 }
             }

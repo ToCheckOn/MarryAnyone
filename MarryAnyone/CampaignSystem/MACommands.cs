@@ -185,68 +185,6 @@ namespace MarryAnyone.CampaignSystem
             return "Please enter \"heterosexual\", \"homosexual\", or \"bisexual\"";
         }
 
-        [CommandLineFunctionality.CommandLineArgumentFunction("set_player_clan", "marry_anyone")]
-        public static string SetPlayerClan(List<string> strings)
-        {
-            MASettings settings = new();
-            if (!CampaignCheats.CheckParameters(strings, 1) || CampaignCheats.CheckHelp(strings))
-            {
-                return "Format is \"marry_anyone.set_player_clan [\"default\"/\"always\"/\"never\"].";
-            }
-            string template = CampaignCheats.ConcatenateString(strings);
-            if (template == null)
-            {
-                return "Please enter \"default\", \"always\", or \"never\"";
-            }
-            else if (string.Equals(template, "default", StringComparison.OrdinalIgnoreCase))
-            {
-                settings.PlayerClan = "Default";
-                return "Success";
-            }
-            else if (string.Equals(template, "always", StringComparison.OrdinalIgnoreCase))
-            {
-                settings.PlayerClan = "Always";
-                return "Success";
-            }
-            else if (string.Equals(template, "never", StringComparison.OrdinalIgnoreCase))
-            {
-                settings.PlayerClan = "Never";
-                return "Success";
-            }
-            return "Please enter \"default\", \"always\", or \"never\"";
-        }
-
-        [CommandLineFunctionality.CommandLineArgumentFunction("set_clan_leader", "marry_anyone")]
-        public static string SetClanLeader(List<string> strings)
-        {
-            MASettings settings = new();
-            if (!CampaignCheats.CheckParameters(strings, 1) || CampaignCheats.CheckHelp(strings))
-            {
-                return "Format is \"marry_anyone.set_clan_leader [\"default\"/\"always\"/\"never\"].";
-            }
-            string template = CampaignCheats.ConcatenateString(strings);
-            if (template == null)
-            {
-                return "Please enter \"default\", \"always\", or \"never\"";
-            }
-            else if (string.Equals(template, "default", StringComparison.OrdinalIgnoreCase))
-            {
-                settings.ClanLeader = "Default";
-                return "Success";
-            }
-            else if (string.Equals(template, "always", StringComparison.OrdinalIgnoreCase))
-            {
-                settings.ClanLeader = "Always";
-                return "Success";
-            }
-            else if (string.Equals(template, "never", StringComparison.OrdinalIgnoreCase))
-            {
-                settings.ClanLeader = "Never";
-                return "Success";
-            }
-            return "Please enter \"default\", \"always\", or \"never\"";
-        }
-
         [CommandLineFunctionality.CommandLineArgumentFunction("set_character_template", "marry_anyone")]
         public static string SetCharacterTemplate(List<string> strings)
         {

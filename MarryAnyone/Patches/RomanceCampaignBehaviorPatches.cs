@@ -96,34 +96,38 @@ namespace MarryAnyone.Patches
             Print("Retry Courtship: " + settings.RetryCourtship);
             Print("Courtship Possible: " + courtshipPossible);
 
-            if (courtshipPossible && romanticLevel == Romance.RomanceLevelEnum.Untested)
+            IFaction mapFaction = Hero.OneToOneConversationHero.MapFaction;
+            if ((mapFaction is null || !mapFaction.IsMinorFaction) && !Hero.OneToOneConversationHero.IsPrisoner)
             {
-                MBTextManager.SetTextVariable("FLIRTATION_LINE", Hero.OneToOneConversationHero.IsFemale
-                        ? "{=v1hC6Aem}My lady, I wish to profess myself your most ardent admirer."
-                        // Makes it simpler, and even if player is homosexual, this still makes some sense.
-                        : "{=bjJs0eeB}My lord, I note that you have not yet taken a wife.", false);
-                return true;
-            }
-
-            if (romanticLevel == Romance.RomanceLevelEnum.FailedInCompatibility || romanticLevel == Romance.RomanceLevelEnum.FailedInPracticalities)
-            {
-                MBTextManager.SetTextVariable("FLIRTATION_LINE", Hero.OneToOneConversationHero.IsFemale
-                        ? "{=4iTaEZKg}My lady, may you give me another chance to prove myself?"
-                        : "{=2WnhUBMM}My lord, may you give me another chance to prove myself?", false);
-
-                // Retry Courtship feature!
-                if (settings.RetryCourtship)
+                if (courtshipPossible && romanticLevel == Romance.RomanceLevelEnum.Untested)
                 {
-                    if (romanticLevel == Romance.RomanceLevelEnum.FailedInCompatibility)
-                    {
-                        ChangeRomanticStateAction.Apply(Hero.MainHero, Hero.OneToOneConversationHero, Romance.RomanceLevelEnum.CourtshipStarted);
-                    }
-                    else if (romanticLevel == Romance.RomanceLevelEnum.FailedInPracticalities)
-                    {
-                        ChangeRomanticStateAction.Apply(Hero.MainHero, Hero.OneToOneConversationHero, Romance.RomanceLevelEnum.CoupleDecidedThatTheyAreCompatible);
-                    }
+                    MBTextManager.SetTextVariable("FLIRTATION_LINE", Hero.OneToOneConversationHero.IsFemale
+                            ? "{=v1hC6Aem}My lady, I wish to profess myself your most ardent admirer."
+                            // Makes it simpler, and even if player is homosexual, this still makes some sense.
+                            : "{=bjJs0eeB}My lord, I note that you have not yet taken a wife.", false);
+                    return true;
                 }
-                return true;
+
+                if (romanticLevel == Romance.RomanceLevelEnum.FailedInCompatibility || romanticLevel == Romance.RomanceLevelEnum.FailedInPracticalities)
+                {
+                    MBTextManager.SetTextVariable("FLIRTATION_LINE", Hero.OneToOneConversationHero.IsFemale
+                            ? "{=4iTaEZKg}My lady, may you give me another chance to prove myself?"
+                            : "{=2WnhUBMM}My lord, may you give me another chance to prove myself?", false);
+
+                    // Retry Courtship feature!
+                    if (settings.RetryCourtship)
+                    {
+                        if (romanticLevel == Romance.RomanceLevelEnum.FailedInCompatibility)
+                        {
+                            ChangeRomanticStateAction.Apply(Hero.MainHero, Hero.OneToOneConversationHero, Romance.RomanceLevelEnum.CourtshipStarted);
+                        }
+                        else if (romanticLevel == Romance.RomanceLevelEnum.FailedInPracticalities)
+                        {
+                            ChangeRomanticStateAction.Apply(Hero.MainHero, Hero.OneToOneConversationHero, Romance.RomanceLevelEnum.CoupleDecidedThatTheyAreCompatible);
+                        }
+                    }
+                    return true;
+                }
             }
             return false;
         }

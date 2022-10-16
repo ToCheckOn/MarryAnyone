@@ -9,17 +9,6 @@ namespace MarryAnyone.Patches
     [HarmonyPatch(typeof(MarriageAction), "Apply")]
     internal sealed class MarriageActionPatch
     {
-        // Careful with patching, can affect AI marriage bartering
-        private static bool Prefix(Hero firstHero, Hero secondHero)
-        {
-            if (firstHero == Hero.MainHero || secondHero == Hero.MainHero)
-            {
-                MAMarriageAction.Apply(firstHero, secondHero, true);
-                return false;
-            }
-            return true;
-        }
-
         private static void Postfix(Hero firstHero, Hero secondHero)
         {
             if (firstHero == Hero.MainHero || secondHero == Hero.MainHero)

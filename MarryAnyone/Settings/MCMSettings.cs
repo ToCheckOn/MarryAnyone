@@ -65,36 +65,6 @@ namespace MarryAnyone.Settings
         public Action ResetEndedCourtships { get; set; } = () => Helpers.ResetEndedCourtships();
 
 
-        [SettingPropertyDropdown("{=playerclan}Player Clan", Order = 0, RequireRestart = false, HintText = "{=playerclan_desc}Player clan persists after marriage. By default the clan only persists if playing as a male.")]
-        [SettingPropertyGroup("{=marriage}Marriage", GroupOrder = 3)]
-        public DropdownDefault<string> PlayerClanDropdown { get; set; } = new DropdownDefault<string>(new string[]
-        {
-            "Default",
-            "Always",
-            "Never"
-        }, 0);
-
-        public string PlayerClan
-        {
-            get => PlayerClanDropdown.SelectedValue;
-            set => PlayerClanDropdown.SelectedValue = value;
-        }
-
-        [SettingPropertyDropdown("{=clanleader}Clan Leader", Order = 1, RequireRestart = false, HintText = "{=clanleader_desc}Player becomes clan leader after marriage. By default the male player can replace a female leader.")]
-        [SettingPropertyGroup("{=marriage}Marriage", GroupOrder = 3)]
-        public DropdownDefault<string> ClanLeaderDropdown { get; set; } = new DropdownDefault<string>(new string[]
-        {
-            "Default",
-            "Always",
-            "Never"
-        }, 0);
-
-        public string ClanLeader
-        {
-            get => ClanLeaderDropdown.SelectedValue;
-            set => ClanLeaderDropdown.SelectedValue = value;
-        }
-
         [SettingPropertyDropdown("{=templatechar}Template Character", RequireRestart = false, HintText = "{=templatechar_desc}Set the template character that is used to set the hero name, skills, and equipment for commoners.")]
         [SettingPropertyGroup("{=commoners}Commoners", GroupOrder = 4)]
         public DropdownDefault<string> TemplateCharacterDropdown { get; set; } = new DropdownDefault<string>(new string[]

@@ -25,6 +25,15 @@ namespace MarryAnyone.Models
                 // Other heroes use the DefaultMarriageModel
                 return base.IsCoupleSuitableForMarriage(firstHero, secondHero);
             }
+            Clan clan = firstHero.Clan;
+            if (((clan is not null) ? clan.Leader : null) == firstHero)
+            {
+                Clan clan2 = secondHero.Clan;
+                if (((clan2 is not null) ? clan2.Leader : null) == secondHero)
+                {
+                    return false;
+                }
+            }
             /* Section for Marry Anyone method */
             // DO NOT MARRY AGAIN!
             if (Romance.GetRomanticLevel(firstHero, secondHero) == Romance.RomanceLevelEnum.Marriage)
@@ -88,7 +97,7 @@ namespace MarryAnyone.Models
             {
                 return base.IsSuitableForMarriage(maidenOrSuitor);
             }
-            if (maidenOrSuitor.IsDead || maidenOrSuitor.IsTemplate || maidenOrSuitor.IsPrisoner)
+            if (maidenOrSuitor.IsDead || maidenOrSuitor.IsTemplate || maidenOrSuitor.IsPrisoner || maidenOrSuitor.IsMinorFactionHero)
             {
                 return false;
             }

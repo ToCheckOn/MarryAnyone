@@ -74,18 +74,6 @@ namespace MarryAnyone
             set => _provider.RetryCourtship = value;
         }
 
-        public string PlayerClan
-        {
-            get => _provider.PlayerClan;
-            set => _provider.PlayerClan = value;
-        }
-
-        public string ClanLeader
-        {
-            get => _provider.ClanLeader;
-            set => _provider.ClanLeader = value;
-        }
-
         public bool Debug
         {
             get => _provider.Debug;
