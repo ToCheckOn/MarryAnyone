@@ -165,7 +165,7 @@ namespace MarryAnyone.Actions
                             {
                                 if (spouse.PartyBelongedTo.Army.LeaderParty == spouse.PartyBelongedTo)
                                 {
-                                    spouse.PartyBelongedTo.Army.DisperseArmy(Army.ArmyDispersionReason.Unknown);
+                                    CampaignEventDispatcher.Instance.OnArmyDispersed(spouse.PartyBelongedTo.Army, Army.ArmyDispersionReason.Unknown, spouse.PartyBelongedTo.Army.Parties.Contains(MobileParty.MainParty));
                                 }
                                 else
                                 {

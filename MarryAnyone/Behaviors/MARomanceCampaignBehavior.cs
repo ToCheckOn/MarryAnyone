@@ -36,7 +36,7 @@ namespace MarryAnyone.Behaviors
 
         /* RomanceCampaignBehavior */
         /* Fields */
-        private static readonly AccessTools.FieldRef<RomanceCampaignBehavior, List<PersuasionTask>>? _allReservations = AccessTools2.FieldRefAccess<RomanceCampaignBehavior, List<PersuasionTask>>("_allReservations");
+        private static readonly AccessTools.FieldRef<RomanceCampaignBehavior, List<PersuasionTask>>? _allReservations = AccessTools.FieldRefAccess<RomanceCampaignBehavior, List<PersuasionTask>>("_allReservations");
 
         private static readonly AccessTools.FieldRef<RomanceCampaignBehavior, Hero>? _playerProposalHero = AccessTools2.FieldRefAccess<RomanceCampaignBehavior, Hero>("_playerProposalHero");
 
@@ -512,7 +512,7 @@ namespace MarryAnyone.Behaviors
             AgentName!(conversationAgent) = _companionHero.Name;
 
             // Meet character for first time
-            _companionHero.HasMet = true;
+            //_companionHero.HasMet = true;
 
             // Add hero to heroes list
             _heroes.Add(conversationAgent, _companionHero);

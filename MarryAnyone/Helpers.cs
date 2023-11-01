@@ -2,6 +2,7 @@
 using HarmonyLib.BUTR.Extensions;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using TaleWorlds.CampaignSystem;
 using TaleWorlds.CampaignSystem.Actions;
 using TaleWorlds.Library;
@@ -11,10 +12,7 @@ namespace MarryAnyone
 {
     internal static class Helpers
     {
-        private static readonly AccessTools.FieldRef<Hero, MBReadOnlyList<Hero>>? ExSpouses = AccessTools2.FieldRefAccess<Hero, MBReadOnlyList<Hero>>("ExSpouses");
-
-        private static readonly AccessTools.FieldRef<Hero, List<Hero>>? _exSpouses = AccessTools2.FieldRefAccess<Hero, List<Hero>>("_exSpouses");
-
+        private static readonly AccessTools.FieldRef<Hero, MBList<Hero>>? _exSpouses = AccessTools2.FieldRefAccess<Hero, MBList<Hero>>("_exSpouses");
         public enum RemoveExSpousesMode
         {
             Duplicates,
@@ -38,13 +36,13 @@ namespace MarryAnyone
 
         public static void RemoveExSpouses(Hero hero, RemoveExSpousesMode removalMode = RemoveExSpousesMode.Duplicates)
         {
-            List<Hero> _exSpousesList = _exSpouses!(hero);
+            MBList<Hero> _exSpousesList = _exSpouses!(hero);
 
             if (removalMode == RemoveExSpousesMode.Duplicates)
             {
                 // Standard remove duplicates spouse
                 // Get exspouse list without duplicates
-                _exSpousesList = _exSpousesList.Distinct().ToList();
+                _exSpousesList = _exSpousesList.Distinct().ToMBList<Hero>();
                 // If exspouse is already a spouse, then remove from exspouses
                 if (_exSpousesList.Contains(hero.Spouse))
                 {
@@ -55,7 +53,7 @@ namespace MarryAnyone
             else
             {
                 // Remove all exspouses
-                _exSpousesList = _exSpousesList.ToList();
+                _exSpousesList = _exSpousesList.ToMBList<Hero>();
                 List<Hero> exSpouses = _exSpousesList.Where(exSpouse => exSpouse.IsAlive).ToList();
                 foreach (Hero exSpouse in exSpouses)
                 {
@@ -67,19 +65,17 @@ namespace MarryAnyone
                     if (removalMode == RemoveExSpousesMode.All)
                     {
                         // Look into your exspouse's exspouse to remove yourself
-                        List<Hero> _exSpousesList2 = _exSpouses!(hero);
+                        MBList<Hero> _exSpousesList2 = _exSpouses!(hero);
                         _exSpousesList2.Remove(hero);
 
                         MBReadOnlyList<Hero> ExSpousesReadOnlyList2 = new(_exSpousesList2);
                         _exSpouses(exSpouse) = _exSpousesList2;
-                        ExSpouses!(exSpouse) = ExSpousesReadOnlyList2;
                     }
                 }
             }
 
             MBReadOnlyList<Hero> ExSpousesReadOnlyList = new(_exSpousesList);
             _exSpouses(hero) = _exSpousesList;
-            ExSpouses!(hero) = ExSpousesReadOnlyList;
         }
 
         public static void CheatOnSpouse()
